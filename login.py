@@ -17,30 +17,19 @@ class data:
                 break
         return flag
     def register(self,username='',pin=0):
-        t=(
-        "INSERT INTO users"
-        " VALUES (%s,%s)"
-        )
-        data=(f'{username}',pin)
-        self.c.execute(t,data)
+        self.c.execute(f"insert into users values ('{username}',{pin})")
         self.conn.commit()
 #Login window
 class Login(data):
     def __init__(self):
         super().__init__()
+        self.user=None
         self.flag=False
         self.login=Tk()
         self.login.title('AlphaTracker')
         self.login.geometry('400x200')
         self.user_var=StringVar()
         self.pin_var=StringVar()
-        # Add image file
-        bg = PhotoImage(file = "/Users/priyannk/Desktop/PortfolioApp/labelimage.png")
-        canvas = Canvas(self.login, width = 300, height = 300)      
-        canvas.pack() 
-# Create Canvas
-        canvas.create_image(20,20, anchor=NW, image=bg)
-# Display image
         self.e1=Entry(self.login,textvariable=self.user_var)
         self.e1.insert(INSERT,"Username")
         self.e2=Entry(self.login,textvariable=self.pin_var)
@@ -67,6 +56,7 @@ class Login(data):
         if not self.check(user,pin):
             messagebox.showerror('unknown user','Wrong username or password')
         else:
+            self.user=user
             self.login.destroy()
             self.flag=True
     def regex(self):
@@ -97,5 +87,3 @@ class Login(data):
             self.register(user,pin1)
             reg.destroy()
     # new window for user registeratione
-f=Login()
-f.run()
